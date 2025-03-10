@@ -5,6 +5,8 @@ public class FlavorEditorHelpers
 {
     static FlavorEditorHelpers()
     {
-        FlavorManager.SetDefineSymbols();
+        if(!FlavorManager.Instance) return;
+
+        FlavorManager.Instance.ApplyCurrentFlavor();
     }
 }

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3794e2b949fd435e9efd7ec007f41dd, type: 3}
   m_Name: Production
   m_EditorClassIdentifier: 
-  ProductName: 
+  ProductName: My App
   BundleVersion: 
   BundleIdentifier: com.sov3rain.myApp

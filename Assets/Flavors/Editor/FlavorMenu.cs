@@ -7,13 +7,13 @@ public class FlavorMenu : EditorWindow
     [MenuItem("Flavors/Create Flavor Manager", false, 0)]
     private static void CreateFlavorManager()
     {
-        ScriptableObjectUtils.CreateAssetInResources<FlavorManager>("FlavorManager");
+        ScriptableObjectUtils.CreateAssetInResources<FlavorManager>("Flavors/FlavorManager");
     }
 
     [MenuItem("Flavors/Create Flavor Manager", true)]
     private static bool ValidateCreateFlavorManager()
     {
-        return !Resources.LoadAll<FlavorManager>("FlavorManager")?.Any() ?? false;
+        return !Resources.LoadAll<FlavorManager>("/")?.Any() ?? false;
     }
 
     [MenuItem("Flavors/Select Flavor", false, 20)]
@@ -63,12 +63,16 @@ public class FlavorMenu : EditorWindow
         foreach (var flavor in flavors)
         {
             var isCurrent = FlavorManager.Instance.IsCurrentFlavor(flavor);
+            string buttonLabel = isCurrent
+                ? flavor.name + " (current)"
+                : flavor.name;
 
             EditorGUI.BeginDisabledGroup(isCurrent);
 
-            if (GUILayout.Button(flavor.name))
+            if (GUILayout.Button(buttonLabel))
             {
                 FlavorManager.Instance.SetCurrentFlavor(flavor);
+                EditorUtility.SetDirty(FlavorManager.Instance);
                 Close();
             }
 

@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Linq;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,7 +15,7 @@ public sealed class FlavorManager : ScriptableObject
         {
             if (!_instance)
             {
-                _instance = Resources.Load<FlavorManager>("FlavorManager");
+                _instance = Resources.LoadAll<FlavorManager>("/").FirstOrDefault();
             }
 
             return _instance;
@@ -47,6 +49,8 @@ public sealed class FlavorManager : ScriptableObject
     private static void ApplyFlavor(Flavor flavor)
     {
 #if UNITY_EDITOR
+        var targetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
+
         if (!string.IsNullOrEmpty(flavor.ProductName))
             PlayerSettings.productName = flavor.ProductName;
 
@@ -56,8 +60,16 @@ public sealed class FlavorManager : ScriptableObject
         if (!string.IsNullOrEmpty(flavor.BundleIdentifier))
         {
             PlayerSettings.SetApplicationIdentifier(
-                targetGroup: EditorUserBuildSettings.selectedBuildTargetGroup,
+                targetGroup,
                 identifier: flavor.BundleIdentifier
+            );
+        }
+
+        if (flavor.Icon)
+        {
+            PlayerSettings.SetIconsForTargetGroup(
+                platform: BuildTargetGroup.Unknown,
+                icons: new Texture2D[] { flavor.Icon }
             );
         }
 

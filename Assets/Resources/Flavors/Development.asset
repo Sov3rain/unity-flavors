@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3794e2b949fd435e9efd7ec007f41dd, type: 3}
   m_Name: Development
   m_EditorClassIdentifier: 
-  ProductName: 
+  ProductName: My App Dev
   BundleVersion: 
   BundleIdentifier: com.sov3rain.myApp.dev
+  Icon: {fileID: 2800000, guid: f91ee9bb972a5456c951b8bbd0e97329, type: 3}

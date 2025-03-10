@@ -6,4 +6,5 @@ public class Flavor : ScriptableObject
     public string ProductName;
     public string BundleVersion;
     public string BundleIdentifier;
+    public Texture2D Icon;
 }
