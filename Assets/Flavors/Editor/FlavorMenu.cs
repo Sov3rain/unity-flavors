@@ -16,7 +16,14 @@ public class FlavorMenu : EditorWindow
         return !Resources.LoadAll<FlavorManager>("/")?.Any() ?? false;
     }
 
-    [MenuItem("Flavors/Select Flavor", false, 20)]
+    [MenuItem("Flavors/Create Flavor", false, 20)]
+    private static void CreateFlavor()
+    {
+        var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>("Flavors/New Flavor");
+        Selection.activeObject = newFlavor;
+    }
+
+    [MenuItem("Flavors/Select Flavor", false, 21)]
     public static void SelectFlavor()
     {
         GetWindow<FlavorMenu>("Select Flavor");
@@ -28,7 +35,7 @@ public class FlavorMenu : EditorWindow
         return FlavorManager.Instance != null;
     }
 
-    [MenuItem("Flavors/Apply Current Flavor", false, 21)]
+    [MenuItem("Flavors/Apply Current Flavor", false, 40)]
     public static void ApplyCurrentFlavor()
     {
         FlavorManager.Instance.ApplyCurrentFlavor();

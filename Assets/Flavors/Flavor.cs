@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Flavor", menuName = "Flavors/Flavor")]
 public sealed class Flavor : ScriptableObject
 {
     [Header("Build Settings")]
