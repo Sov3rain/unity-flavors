@@ -46,6 +46,12 @@ public sealed class FlavorManager : ScriptableObject
     public void SetCurrentFlavor(Flavor flavor)
     {
         _currentFlavor = flavor;
+
+#if UNITY_EDITOR
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+#endif
+
         ApplyFlavor(flavor);
     }
 

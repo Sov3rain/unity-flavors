@@ -22,5 +22,15 @@ public sealed class Flavor : ScriptableObject
         public string Key;
         public string Value;
     }
+
+#if UNITY_EDITOR
+    void OnValidate()
+    {
+        if (FlavorManager.Instance && FlavorManager.Instance.IsCurrentFlavor(this))
+        {
+            FlavorManager.Instance.ApplyCurrentFlavor();
+        }
+    }
+#endif
 }
 
