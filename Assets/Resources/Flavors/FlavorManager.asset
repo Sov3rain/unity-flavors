@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba129a793a3a24426882a723911a33ad, type: 3}
   m_Name: FlavorManager
   m_EditorClassIdentifier: 
-  _currentFlavor: {fileID: 0}
+  _currentFlavor: {fileID: 11400000, guid: 051231255f3914b70ab6e58ab90bbf2b, type: 2}

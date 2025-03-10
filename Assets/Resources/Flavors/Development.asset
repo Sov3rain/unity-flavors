@@ -16,3 +16,6 @@ MonoBehaviour:
   BundleVersion: 
   BundleIdentifier: com.sov3rain.myApp.dev
   Icon: {fileID: 2800000, guid: f91ee9bb972a5456c951b8bbd0e97329, type: 3}
+  Properties:
+  - Key: baseUrl
+    Value: https://example.com

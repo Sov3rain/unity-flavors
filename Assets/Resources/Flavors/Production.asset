@@ -15,3 +15,7 @@ MonoBehaviour:
   ProductName: My App
   BundleVersion: 
   BundleIdentifier: com.sov3rain.myApp
+  Icon: {fileID: 0}
+  Properties:
+  - Key: baseUrl
+    Value: https://example.com
