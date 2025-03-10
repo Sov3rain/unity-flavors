@@ -85,7 +85,6 @@ public sealed class FlavorManager : ScriptableObject
         return _props.TryGetValue(key, out var value) ? float.Parse(value) : defaultValue;
     }
 
-
     private void ApplyFlavor(Flavor flavor)
     {
 #if UNITY_EDITOR
@@ -128,7 +127,8 @@ public sealed class FlavorManager : ScriptableObject
 
         if (FlavorManager.Instance && FlavorManager.Instance.Current != null)
         {
-            string symbol = $"FLAVOR_{FlavorManager.Instance.Current.name.ToUpper()}";
+            string flavorName = FlavorManager.Instance.Current.name.Replace(" ", "_").ToUpper();
+            string symbol = $"FLAVOR_{flavorName}";
 
             // Add new symbol
             if (!string.IsNullOrEmpty(defines) && !defines.EndsWith(";"))

@@ -19,7 +19,7 @@ public class FlavorMenu : EditorWindow
     [MenuItem("Flavors/Create Flavor", false, 20)]
     private static void CreateFlavor()
     {
-        var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>("Flavors/New Flavor");
+        var newFlavor = CreateFlavorInternal();
         Selection.activeObject = newFlavor;
     }
 
@@ -36,7 +36,7 @@ public class FlavorMenu : EditorWindow
         return FlavorManager.Instance != null;
     }
 
-    [MenuItem("Flavors/Apply Current Flavor", false, 40)]
+    [MenuItem("Flavors/Apply Current Flavor", false, 22)]
     private static void ApplyCurrentFlavor()
     {
         FlavorManager.Instance.ApplyCurrentFlavor();
@@ -47,6 +47,18 @@ public class FlavorMenu : EditorWindow
     {
         if (!FlavorManager.Instance) return false;
         return FlavorManager.Instance.Current != null;
+    }
+
+    [MenuItem("Flavors/Refresh Define Symbols", false, 100)]
+    private static void RefreshDefineSymbols()
+    {
+        FlavorManager.SetDefineSymbols();
+    }
+
+    private static Flavor CreateFlavorInternal()
+    {
+        var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>("Flavors/New Flavor");
+        return newFlavor;
     }
 
     private void OnGUI()
@@ -60,6 +72,23 @@ public class FlavorMenu : EditorWindow
         GUILayout.Label("<size=14><b>Select a flavor to apply</b></size>", labelStyle);
         GUILayout.Label("", GUI.skin.horizontalSlider);
         GUILayout.Space(20);
+
+        if (flavors.Length == 0)
+        {
+            GUILayout.Label("No flavors found in Resources/Flavors folder");
+            GUILayout.Space(20);
+
+            if (GUILayout.Button("Create Flavor", GUILayout.Height(30)))
+            {
+                var newFlavor = CreateFlavorInternal();
+                FlavorManager.Instance.SetCurrentFlavor(newFlavor);
+                EditorUtility.SetDirty(FlavorManager.Instance);
+                Selection.activeObject = newFlavor;
+                Close();
+            }
+
+            return;
+        }
 
         foreach (var flavor in flavors)
         {

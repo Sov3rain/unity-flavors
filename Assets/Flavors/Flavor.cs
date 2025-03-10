@@ -31,6 +31,11 @@ public sealed class Flavor : ScriptableObject
             FlavorManager.Instance.ApplyCurrentFlavor();
         }
     }
+
+    void OnDestroy()
+    {
+        Debug.Log("OnDestroy Flavor");
+    }
 #endif
 }
 
