@@ -24,7 +24,7 @@ public class FlavorMenu : EditorWindow
     }
 
     [MenuItem("Flavors/Select Flavor", false, 21)]
-    public static void SelectFlavor()
+    private static void SelectFlavor()
     {
         GetWindow<FlavorMenu>("Select Flavor");
     }
@@ -36,7 +36,7 @@ public class FlavorMenu : EditorWindow
     }
 
     [MenuItem("Flavors/Apply Current Flavor", false, 40)]
-    public static void ApplyCurrentFlavor()
+    private static void ApplyCurrentFlavor()
     {
         FlavorManager.Instance.ApplyCurrentFlavor();
     }
