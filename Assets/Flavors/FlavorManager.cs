@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Linq;
 
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -46,10 +45,15 @@ public sealed class FlavorManager : ScriptableObject
         return _currentFlavor == flavor;
     }
 
-    private static void ApplyFlavor(Flavor flavor)
+    public bool IsCurrentFlavor(string flavorName)
+    {
+        return _currentFlavor == null ? false : _currentFlavor.name == flavorName;
+    }
+
+    private void ApplyFlavor(Flavor flavor)
     {
 #if UNITY_EDITOR
-        var targetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
+        BuildTargetGroup targetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
 
         if (!string.IsNullOrEmpty(flavor.ProductName))
             PlayerSettings.productName = flavor.ProductName;
@@ -80,8 +84,8 @@ public sealed class FlavorManager : ScriptableObject
 #if UNITY_EDITOR
     public static void SetDefineSymbols()
     {
-        string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(
-            EditorUserBuildSettings.selectedBuildTargetGroup);
+        BuildTargetGroup targetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
+        string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
 
         // Remove existing FLAVOR_ symbols
         defines = System.Text.RegularExpressions.Regex.Replace(defines, @"FLAVOR_\w+;?", "");
@@ -99,8 +103,7 @@ public sealed class FlavorManager : ScriptableObject
             defines += symbol;
         }
 
-        PlayerSettings.SetScriptingDefineSymbolsForGroup(
-            EditorUserBuildSettings.selectedBuildTargetGroup, defines);
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, defines);
     }
 #endif
 }

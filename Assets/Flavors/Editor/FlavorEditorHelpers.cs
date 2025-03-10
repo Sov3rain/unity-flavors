@@ -5,8 +5,7 @@ public class FlavorEditorHelpers
 {
     static FlavorEditorHelpers()
     {
-        if(!FlavorManager.Instance) return;
-
+        if (!FlavorManager.Instance) return;
         FlavorManager.Instance.ApplyCurrentFlavor();
     }
 }

@@ -69,7 +69,7 @@ public class FlavorMenu : EditorWindow
 
             EditorGUI.BeginDisabledGroup(isCurrent);
 
-            if (GUILayout.Button(buttonLabel))
+            if (GUILayout.Button(buttonLabel, GUILayout.Height(30)))
             {
                 FlavorManager.Instance.SetCurrentFlavor(flavor);
                 EditorUtility.SetDirty(FlavorManager.Instance);
