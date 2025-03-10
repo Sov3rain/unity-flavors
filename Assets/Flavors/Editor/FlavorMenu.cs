@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Linq;
 
-public class FlavorMenu : EditorWindow
+public class FlavorMenu : Editor
 {
     [MenuItem("Flavors/Create Flavor Manager", false, 0)]
     private static void CreateFlavorManager()
@@ -19,15 +19,14 @@ public class FlavorMenu : EditorWindow
     [MenuItem("Flavors/Create Flavor", false, 20)]
     private static void CreateFlavor()
     {
-        var newFlavor = CreateFlavorInternal();
+        var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>("Flavors/New Flavor");
         Selection.activeObject = newFlavor;
     }
 
     [MenuItem("Flavors/Select Flavor", false, 21)]
     private static void SelectFlavor()
     {
-        var menu = GetWindow<FlavorMenu>(utility: true, title: "Select Flavor");
-        menu.ShowModalUtility();
+        FlavorSelectionWindow.ShowWindow();
     }
 
     [MenuItem("Flavors/Select Flavor", true)]
@@ -59,54 +58,5 @@ public class FlavorMenu : EditorWindow
     {
         var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>("Flavors/New Flavor");
         return newFlavor;
-    }
-
-    private void OnGUI()
-    {
-        var flavors = Resources.LoadAll<Flavor>("Flavors");
-
-        var labelStyle = new GUIStyle(GUI.skin.label);
-        labelStyle.richText = true;
-
-        GUILayout.Space(10);
-        GUILayout.Label("<size=14><b>Select a flavor to apply</b></size>", labelStyle);
-        GUILayout.Label("", GUI.skin.horizontalSlider);
-        GUILayout.Space(20);
-
-        if (flavors.Length == 0)
-        {
-            GUILayout.Label("No flavors found in Resources/Flavors folder");
-            GUILayout.Space(20);
-
-            if (GUILayout.Button("Create Flavor", GUILayout.Height(30)))
-            {
-                var newFlavor = CreateFlavorInternal();
-                FlavorManager.Instance.SetCurrentFlavor(newFlavor);
-                EditorUtility.SetDirty(FlavorManager.Instance);
-                Selection.activeObject = newFlavor;
-                Close();
-            }
-
-            return;
-        }
-
-        foreach (var flavor in flavors)
-        {
-            var isCurrent = FlavorManager.Instance.IsCurrentFlavor(flavor);
-            string buttonLabel = isCurrent
-                ? flavor.name + " (current)"
-                : flavor.name;
-
-            EditorGUI.BeginDisabledGroup(isCurrent);
-
-            if (GUILayout.Button(buttonLabel, GUILayout.Height(30)))
-            {
-                FlavorManager.Instance.SetCurrentFlavor(flavor);
-                EditorUtility.SetDirty(FlavorManager.Instance);
-                Close();
-            }
-
-            EditorGUI.EndDisabledGroup();
-        }
     }
 }
