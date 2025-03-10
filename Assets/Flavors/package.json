@@ -1,0 +1,8 @@
+{
+  "displayName": "Flavors",
+  "name": "unity-flavors",
+  "version": "1.0.0",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  }  
+}
