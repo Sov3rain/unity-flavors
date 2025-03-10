@@ -10,5 +10,16 @@ public class FlavorExample : MonoBehaviour
 
         Debug.Log($"Base URL: {baseUrl}");
         Debug.Log($"Log Level: {logLevel}");
+
+        PreprocessorExample();
+    }
+
+    private void PreprocessorExample()
+    {
+#if FLAVOR_DEVELOPMENT
+        Debug.Log("Development");
+#elif FLAVOR_PRODUCTION
+        Debug.Log("Production");
+#endif
     }
 }
