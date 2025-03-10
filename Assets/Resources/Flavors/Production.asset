@@ -19,3 +19,5 @@ MonoBehaviour:
   Properties:
   - Key: baseUrl
     Value: https://example.com
+  - Key: logLevel
+    Value: 0

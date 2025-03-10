@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -21,13 +23,25 @@ public sealed class FlavorManager : ScriptableObject
         }
     }
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void Init()
+    {
+        // Cache current flavor properties
+        if (FlavorManager.Instance && Instance.Current != null)
+        {
+            foreach (var prop in Instance.Current.GetProperties())
+            {
+                Instance._props[prop.Key] = prop.Value;
+            }
+        }
+    }
+
     [SerializeField]
     private Flavor _currentFlavor;
 
-    public Flavor GetCurrentFlavor()
-    {
-        return _currentFlavor;
-    }
+    private readonly Dictionary<string, string> _props = new();
+
+    public Flavor Current => _currentFlavor;
 
     public void SetCurrentFlavor(Flavor flavor)
     {
@@ -49,6 +63,22 @@ public sealed class FlavorManager : ScriptableObject
     {
         return _currentFlavor == null ? false : _currentFlavor.name == flavorName;
     }
+
+    public string GetString(string key, string defaultValue = "")
+    {
+        return _props.TryGetValue(key, out var value) ? value : defaultValue;
+    }
+
+    public int GetInt(string key, int defaultValue = 0)
+    {
+        return _props.TryGetValue(key, out var value) ? int.Parse(value) : defaultValue;
+    }
+
+    public float GetFloat(string key, float defaultValue = 0f)
+    {
+        return _props.TryGetValue(key, out var value) ? float.Parse(value) : defaultValue;
+    }
+
 
     private void ApplyFlavor(Flavor flavor)
     {
@@ -90,9 +120,9 @@ public sealed class FlavorManager : ScriptableObject
         // Remove existing FLAVOR_ symbols
         defines = System.Text.RegularExpressions.Regex.Replace(defines, @"FLAVOR_\w+;?", "");
 
-        if (FlavorManager.Instance && FlavorManager.Instance.GetCurrentFlavor() != null)
+        if (FlavorManager.Instance && FlavorManager.Instance.Current != null)
         {
-            string symbol = $"FLAVOR_{FlavorManager.Instance.GetCurrentFlavor().name.ToUpper()}";
+            string symbol = $"FLAVOR_{FlavorManager.Instance.Current.name.ToUpper()}";
 
             // Add new symbol
             if (!string.IsNullOrEmpty(defines) && !defines.EndsWith(";"))

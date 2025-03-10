@@ -26,7 +26,8 @@ public class FlavorMenu : EditorWindow
     [MenuItem("Flavors/Select Flavor", false, 21)]
     private static void SelectFlavor()
     {
-        GetWindow<FlavorMenu>("Select Flavor");
+        var menu = GetWindow<FlavorMenu>(utility: true, title: "Select Flavor");
+        menu.ShowModalUtility();
     }
 
     [MenuItem("Flavors/Select Flavor", true)]
@@ -45,14 +46,20 @@ public class FlavorMenu : EditorWindow
     private static bool ValidateApplyCurrentFlavor()
     {
         if (!FlavorManager.Instance) return false;
-        return FlavorManager.Instance.GetCurrentFlavor() != null;
+        return FlavorManager.Instance.Current != null;
     }
 
     private void OnGUI()
     {
         var flavors = Resources.LoadAll<Flavor>("Flavors");
 
-        GUILayout.Label("Select a flavor to build with:");
+        var labelStyle = new GUIStyle(GUI.skin.label);
+        labelStyle.richText = true;
+
+        GUILayout.Space(10);
+        GUILayout.Label("<size=14><b>Select a flavor to apply</b></size>", labelStyle);
+        GUILayout.Label("", GUI.skin.horizontalSlider);
+        GUILayout.Space(20);
 
         foreach (var flavor in flavors)
         {
