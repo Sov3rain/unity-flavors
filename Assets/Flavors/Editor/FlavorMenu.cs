@@ -41,19 +41,6 @@ public class FlavorMenu : EditorWindow
         return FlavorManager.Instance.GetCurrentFlavor() != null;
     }
 
-    [MenuItem("Flavors/Build Current Flavor", false, 40)]
-    private static void BuildCurrentFlavor()
-    {
-        FlavorManager.Instance.ApplyCurrentFlavor();
-    }
-
-    [MenuItem("Flavors/Build Current Flavor", true)]
-    private static bool ValidateBuildCurrentFlavor()
-    {
-        if (!FlavorManager.Instance) return false;
-        return FlavorManager.Instance.GetCurrentFlavor() != null;
-    }
-
     private void OnGUI()
     {
         var flavors = Resources.LoadAll<Flavor>("Flavors");
