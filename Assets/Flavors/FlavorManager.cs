@@ -1,6 +1,4 @@
-using System.Linq;
 using UnityEngine;
-using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,7 +11,11 @@ public sealed class FlavorManager : ScriptableObject
     {
         get
         {
-            EnsureInstance();
+            if (!_instance)
+            {
+                _instance = Resources.Load<FlavorManager>("FlavorManager");
+            }
+
             return _instance;
         }
     }
@@ -23,7 +25,6 @@ public sealed class FlavorManager : ScriptableObject
 
     public Flavor GetCurrentFlavor()
     {
-        EnsureCurrentFlavor();
         return _currentFlavor;
     }
 
@@ -35,38 +36,12 @@ public sealed class FlavorManager : ScriptableObject
 
     public void ApplyCurrentFlavor()
     {
-        EnsureCurrentFlavor();
         ApplyFlavor(_currentFlavor);
     }
 
     public bool IsCurrentFlavor(Flavor flavor)
     {
-        EnsureCurrentFlavor();
         return _currentFlavor == flavor;
-    }
-
-    private static void EnsureInstance()
-    {
-        if (!_instance)
-        {
-            _instance = Resources.LoadAll<FlavorManager>("/").FirstOrDefault();
-        }
-    }
-
-    private static void EnsureCurrentFlavor()
-    {
-        EnsureInstance();
-
-        if (!Instance.GetCurrentFlavor())
-        {
-            var flavor = Resources.LoadAll<Flavor>("Flavors").FirstOrDefault();
-            Instance.SetCurrentFlavor(flavor);
-        }
-
-        if (!Instance.GetCurrentFlavor())
-        {
-            throw new Exception("No Flavors found, please create at least one Flavor before using FlavorManager");
-        }
     }
 
     private static void ApplyFlavor(Flavor flavor)
@@ -91,25 +66,26 @@ public sealed class FlavorManager : ScriptableObject
     }
 
 #if UNITY_EDITOR
-    private static void SetDefineSymbols()
+    public static void SetDefineSymbols()
     {
-        if (!Instance.GetCurrentFlavor())
-            return;
-
-        string symbol = $"FLAVOR_{Instance.GetCurrentFlavor().name.ToUpper()}";
         string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(
             EditorUserBuildSettings.selectedBuildTargetGroup);
 
         // Remove existing FLAVOR_ symbols
         defines = System.Text.RegularExpressions.Regex.Replace(defines, @"FLAVOR_\w+;?", "");
 
-        // Add new symbol
-        if (!string.IsNullOrEmpty(defines) && !defines.EndsWith(";"))
+        if (FlavorManager.Instance && FlavorManager.Instance.GetCurrentFlavor() != null)
         {
-            defines += ";";
-        }
+            string symbol = $"FLAVOR_{FlavorManager.Instance.GetCurrentFlavor().name.ToUpper()}";
 
-        defines += symbol;
+            // Add new symbol
+            if (!string.IsNullOrEmpty(defines) && !defines.EndsWith(";"))
+            {
+                defines += ";";
+            }
+
+            defines += symbol;
+        }
 
         PlayerSettings.SetScriptingDefineSymbolsForGroup(
             EditorUserBuildSettings.selectedBuildTargetGroup, defines);
