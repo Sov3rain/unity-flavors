@@ -34,7 +34,7 @@ public class FlavorMenu : Editor
         return FlavorManager.Instance != null;
     }
 
-    [MenuItem("Flavors/Apply Current Flavor", false, 22)]
+    [MenuItem("Flavors/Apply Current Flavor", false, 100)]
     private static void ApplyCurrentFlavor()
     {
         FlavorManager.Instance.ApplyCurrentFlavor();
@@ -47,7 +47,7 @@ public class FlavorMenu : Editor
         return FlavorManager.Instance.Current != null;
     }
 
-    [MenuItem("Flavors/Refresh Define Symbols", false, 100)]
+    [MenuItem("Flavors/Refresh Define Symbols", false, 101)]
     private static void RefreshDefineSymbols()
     {
         FlavorManager.SetDefineSymbols();
