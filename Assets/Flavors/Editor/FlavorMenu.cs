@@ -19,8 +19,7 @@ public class FlavorMenu : Editor
     [MenuItem("Flavors/Create Flavor", false, 20)]
     private static void CreateFlavor()
     {
-        var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>("Flavors/New Flavor");
-        Selection.activeObject = newFlavor;
+        FlavorCreationWindow.ShowWindow();
     }
 
     [MenuItem("Flavors/Select Flavor", false, 21)]
@@ -52,11 +51,5 @@ public class FlavorMenu : Editor
     private static void RefreshDefineSymbols()
     {
         FlavorManager.SetDefineSymbols();
-    }
-
-    private static Flavor CreateFlavorInternal()
-    {
-        var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>("Flavors/New Flavor");
-        return newFlavor;
     }
 }
