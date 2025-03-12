@@ -1,11 +1,14 @@
 using UnityEditor;
 
-[InitializeOnLoad]
-public class FlavorEditorHelpers
+namespace UnityFlavors
 {
-    static FlavorEditorHelpers()
+    [InitializeOnLoad]
+    public class FlavorEditorHelpers
     {
-        if (!FlavorManager.Instance) return;
-        FlavorManager.Instance.ApplyCurrentFlavor();
+        static FlavorEditorHelpers()
+        {
+            if (!FlavorManager.Instance) return;
+            FlavorManager.Instance.ApplyCurrentFlavor();
+        }
     }
 }

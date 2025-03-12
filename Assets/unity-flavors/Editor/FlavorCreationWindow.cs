@@ -2,75 +2,78 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-public class FlavorCreationWindow : EditorWindow
+namespace UnityFlavors
 {
-    private string _name = "";
-
-    public static void ShowWindow()
+    public class FlavorCreationWindow : EditorWindow
     {
-        var window = GetWindow<FlavorCreationWindow>(utility: true, title: "Create a new flavor");
-        window.ShowModalUtility();
-    }
+        private string _name = "";
 
-    private void OnGUI()
-    {
-        var labelStyle = new GUIStyle(GUI.skin.label);
-        labelStyle.richText = true;
-
-        GUILayout.Space(10);
-        GUILayout.Label("<size=14><b>Enter a name for your new flavor:</b></size>", labelStyle);
-        GUILayout.Space(5);
-
-        _name = EditorGUILayout.TextField(_name);
-        GUILayout.Label("", GUI.skin.horizontalSlider);
-
-        GUILayout.Space(20);
-
-        GUI.enabled = !string.IsNullOrEmpty(_name);
-
-        if (GUILayout.Button("Create", GUILayout.Height(30)))
+        public static void ShowWindow()
         {
-            var newFlavorName = _name.Trim();
-            var newFlavor = CreateNewFlavorAsset(newFlavorName);
-
-            Selection.activeObject = newFlavor;
-            Close();
+            var window = GetWindow<FlavorCreationWindow>(utility: true, title: "Create a new flavor");
+            window.ShowModalUtility();
         }
 
-        if (GUILayout.Button("Create and set as current", GUILayout.Height(30)))
+        private void OnGUI()
         {
-            var newFlavorName = _name.Trim();
-            var newFlavor = CreateNewFlavorAsset(newFlavorName);
+            var labelStyle = new GUIStyle(GUI.skin.label);
+            labelStyle.richText = true;
 
-            FlavorManager.Instance.SetCurrentFlavor(newFlavor);
-            EditorUtility.SetDirty(FlavorManager.Instance);
-            Selection.activeObject = newFlavor;
-            Close();
+            GUILayout.Space(10);
+            GUILayout.Label("<size=14><b>Enter a name for your new flavor:</b></size>", labelStyle);
+            GUILayout.Space(5);
+
+            _name = EditorGUILayout.TextField(_name);
+            GUILayout.Label("", GUI.skin.horizontalSlider);
+
+            GUILayout.Space(20);
+
+            GUI.enabled = !string.IsNullOrEmpty(_name);
+
+            if (GUILayout.Button("Create", GUILayout.Height(30)))
+            {
+                var newFlavorName = _name.Trim();
+                var newFlavor = CreateNewFlavorAsset(newFlavorName);
+
+                Selection.activeObject = newFlavor;
+                Close();
+            }
+
+            if (GUILayout.Button("Create and set as current", GUILayout.Height(30)))
+            {
+                var newFlavorName = _name.Trim();
+                var newFlavor = CreateNewFlavorAsset(newFlavorName);
+
+                FlavorManager.Instance.SetCurrentFlavor(newFlavor);
+                EditorUtility.SetDirty(FlavorManager.Instance);
+                Selection.activeObject = newFlavor;
+                Close();
+            }
+
+            GUI.enabled = true;
+            GUILayout.Label("", GUI.skin.horizontalSlider);
+            GUILayout.Space(20);
+
+            var defineSymbol = _name.Replace(" ", "_").ToUpper();
+            GUILayout.Label($"<i>Your new define symbol will be 'FLAVOR_{defineSymbol}'</i>", labelStyle);
         }
 
-        GUI.enabled = true;
-        GUILayout.Label("", GUI.skin.horizontalSlider);
-        GUILayout.Space(20);
-
-        var defineSymbol = _name.Replace(" ", "_").ToUpper();
-        GUILayout.Label($"<i>Your new define symbol will be 'FLAVOR_{defineSymbol}'</i>", labelStyle);
-    }
-
-    private static Flavor CreateNewFlavorAsset(string newFlavorName)
-    {
-        string dirPath = $"Assets/Flavors";
-        
-        if (!AssetDatabase.IsValidFolder(dirPath))
+        private static Flavor CreateNewFlavorAsset(string newFlavorName)
         {
-            Directory.CreateDirectory(dirPath);
+            string dirPath = $"Assets/Flavors";
+
+            if (!AssetDatabase.IsValidFolder(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+                AssetDatabase.Refresh();
+            }
+
+            Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
+
+            AssetDatabase.CreateAsset(newFlavor, $"{dirPath}/{newFlavorName}.asset");
+            AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+            return newFlavor;
         }
-
-        Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
-
-        AssetDatabase.CreateAsset(newFlavor, $"{dirPath}/{newFlavorName}.asset");
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        return newFlavor;
     }
 }

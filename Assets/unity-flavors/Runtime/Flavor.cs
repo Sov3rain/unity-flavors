@@ -2,40 +2,43 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Flavor : ScriptableObject
+namespace UnityFlavors
 {
-    [Header("Build Settings")]
-    public string ProductName;
-    public string BundleVersion;
-    public string BundleIdentifier;
-    public Texture2D Icon;
-
-    [Header("Runtime Settings")]
-    [SerializeField]
-    private FlavorProperty[] Properties;
-
-    public IEnumerable<FlavorProperty> GetProperties() => Properties;
-
-    [Serializable]
-    public class FlavorProperty
+    public sealed class Flavor : ScriptableObject
     {
-        public string Key;
-        public string Value;
-    }
-
-#if UNITY_EDITOR
-    void OnValidate()
-    {
-        if (FlavorManager.Instance && FlavorManager.Instance.IsCurrentFlavor(this))
+        [Header("Build Settings")]
+        public string ProductName;
+        public string BundleVersion;
+        public string BundleIdentifier;
+        public Texture2D Icon;
+    
+        [Header("Runtime Settings")]
+        [SerializeField]
+        private FlavorProperty[] Properties;
+    
+        public IEnumerable<FlavorProperty> GetProperties() => Properties;
+    
+        [Serializable]
+        public class FlavorProperty
         {
-            FlavorManager.Instance.ApplyCurrentFlavor();
+            public string Key;
+            public string Value;
         }
+    
+    #if UNITY_EDITOR
+        void OnValidate()
+        {
+            if (FlavorManager.Instance && FlavorManager.Instance.IsCurrentFlavor(this))
+            {
+                FlavorManager.Instance.ApplyCurrentFlavor();
+            }
+        }
+    
+        void OnDestroy()
+        {
+            Debug.Log("OnDestroy Flavor");
+        }
+    #endif
     }
-
-    void OnDestroy()
-    {
-        Debug.Log("OnDestroy Flavor");
-    }
-#endif
 }
 
