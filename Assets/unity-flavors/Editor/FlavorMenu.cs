@@ -7,7 +7,10 @@ public class FlavorMenu : Editor
     [MenuItem("Flavors/Create Flavor Manager", false, 0)]
     private static void CreateFlavorManager()
     {
-        ScriptableObjectUtils.CreateAssetInResources<FlavorManager>("Flavors/FlavorManager");
+        var newFlavorManager = ScriptableObject.CreateInstance<FlavorManager>();
+        AssetDatabase.CreateAsset(newFlavorManager, "Assets/Flavors/FlavorManager.asset");
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     [MenuItem("Flavors/Create Flavor Manager", true)]

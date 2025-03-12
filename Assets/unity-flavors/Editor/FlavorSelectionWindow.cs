@@ -29,19 +29,7 @@ public class FlavorSelectionWindow : EditorWindow
 
         if (flavors.Length == 0)
         {
-            GUILayout.Label("No flavors found in Resources/Flavors folder");
-            GUILayout.Space(20);
-
-            if (GUILayout.Button("Create Flavor", GUILayout.Height(30)))
-            {
-                var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>("Flavors/New Flavor");
-
-                FlavorManager.Instance.SetCurrentFlavor(newFlavor);
-                EditorUtility.SetDirty(FlavorManager.Instance);
-                Selection.activeObject = newFlavor;
-                Close();
-            }
-
+            GUILayout.Label("No flavors found, create one using the menu item 'Flavors/Create Flavor'", labelStyle);
             return;
         }
 
