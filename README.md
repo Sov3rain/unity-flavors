@@ -21,9 +21,16 @@ Unity Flavors provides an easy way to maintain multiple variants of your applica
 
 ## Installation
 
-1. Import the Unity Flavors package into your project
-2. Navigate to `Flavors > Create Flavor Manager` in the Unity menu
-3. Start creating and using flavors!
+Open the *Package Manager* window, and click the *+* icon, then click on *Add package from git url*. Copy and paste the
+following url and click *Add*:
+
+```bash
+https://github.com/Sov3rain/unity-flavors.git?path=/Assets/unity-flavors#1.0.0
+```
+
+This will tag the package with a specific version.
+
+You can also install the SDK by downloading the `.unitypackage` from the [releases page](https://github.com/Sov3rain/unity-flavors/releases) and importing it into your project.
 
 ## Getting Started
 
