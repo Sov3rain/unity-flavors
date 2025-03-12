@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Linq;
+using System.IO;
 
 namespace UnityFlavors
 {
@@ -9,10 +10,19 @@ namespace UnityFlavors
         [MenuItem("Flavors/Create Flavor Manager", false, 0)]
         private static void CreateFlavorManager()
         {
+            var dirPath = "Assets/Resources";
             var newFlavorManager = ScriptableObject.CreateInstance<FlavorManager>();
-            AssetDatabase.CreateAsset(newFlavorManager, "Assets/Resources/FlavorManager.asset");
+
+            if (!AssetDatabase.IsValidFolder(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+
+            AssetDatabase.CreateAsset(newFlavorManager, $"{dirPath}/FlavorManager.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+
+            RefreshDefineSymbols();
         }
     
         [MenuItem("Flavors/Create Flavor Manager", true)]

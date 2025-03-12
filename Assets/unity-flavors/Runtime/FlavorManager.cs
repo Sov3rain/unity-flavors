@@ -90,28 +90,31 @@ namespace UnityFlavors
         private void ApplyFlavor(Flavor flavor)
         {
 #if UNITY_EDITOR
-            BuildTargetGroup targetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-
-            if (!string.IsNullOrEmpty(flavor.ProductName))
-                PlayerSettings.productName = flavor.ProductName;
-
-            if (!string.IsNullOrEmpty(flavor.BundleVersion))
-                PlayerSettings.bundleVersion = flavor.BundleVersion;
-
-            if (!string.IsNullOrEmpty(flavor.BundleIdentifier))
+            if (flavor)
             {
-                PlayerSettings.SetApplicationIdentifier(
-                    targetGroup,
-                    identifier: flavor.BundleIdentifier
-                );
-            }
+                BuildTargetGroup targetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
 
-            if (flavor.Icon)
-            {
-                PlayerSettings.SetIconsForTargetGroup(
-                    platform: BuildTargetGroup.Unknown,
-                    icons: new Texture2D[] { flavor.Icon }
-                );
+                if (!string.IsNullOrEmpty(flavor.ProductName))
+                    PlayerSettings.productName = flavor.ProductName;
+
+                if (!string.IsNullOrEmpty(flavor.BundleVersion))
+                    PlayerSettings.bundleVersion = flavor.BundleVersion;
+
+                if (!string.IsNullOrEmpty(flavor.BundleIdentifier))
+                {
+                    PlayerSettings.SetApplicationIdentifier(
+                        targetGroup,
+                        identifier: flavor.BundleIdentifier
+                    );
+                }
+
+                if (flavor.Icon)
+                {
+                    PlayerSettings.SetIconsForTargetGroup(
+                        platform: BuildTargetGroup.Unknown,
+                        icons: new Texture2D[] { flavor.Icon }
+                    );
+                }
             }
 
             SetDefineSymbols();
