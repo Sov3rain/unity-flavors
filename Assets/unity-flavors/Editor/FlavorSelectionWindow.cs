@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
 
 public class FlavorSelectionWindow : EditorWindow
 {
@@ -11,7 +12,12 @@ public class FlavorSelectionWindow : EditorWindow
 
     private void OnGUI()
     {
-        var flavors = Resources.LoadAll<Flavor>("Flavors");
+        string[] guids = AssetDatabase.FindAssets("t:Flavor");
+        Flavor[] flavors = guids.Select(guid =>
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            return AssetDatabase.LoadAssetAtPath<Flavor>(path);
+        }).ToArray();
 
         var labelStyle = new GUIStyle(GUI.skin.label);
         labelStyle.richText = true;

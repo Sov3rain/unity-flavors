@@ -13,7 +13,7 @@ public class FlavorMenu : Editor
     [MenuItem("Flavors/Create Flavor Manager", true)]
     private static bool ValidateCreateFlavorManager()
     {
-        return !Resources.LoadAll<FlavorManager>("/")?.Any() ?? false;
+        return !AssetDatabase.FindAssets("t:FlavorManager").Any();
     }
 
     [MenuItem("Flavors/Create Flavor", false, 20)]

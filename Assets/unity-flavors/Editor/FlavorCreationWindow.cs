@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using System.IO;
 
 public class FlavorCreationWindow : EditorWindow
 {
@@ -30,9 +31,8 @@ public class FlavorCreationWindow : EditorWindow
         if (GUILayout.Button("Create", GUILayout.Height(30)))
         {
             var newFlavorName = _name.Trim();
-            var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>(
-                fileName: $"Flavors/{newFlavorName}"
-            );
+            var newFlavor = CreateNewFlavorAsset(newFlavorName);
+
             Selection.activeObject = newFlavor;
             Close();
         }
@@ -40,9 +40,8 @@ public class FlavorCreationWindow : EditorWindow
         if (GUILayout.Button("Create and set as current", GUILayout.Height(30)))
         {
             var newFlavorName = _name.Trim();
-            var newFlavor = ScriptableObjectUtils.CreateAssetInResources<Flavor>(
-                fileName: $"Flavors/{newFlavorName}"
-            );
+            var newFlavor = CreateNewFlavorAsset(newFlavorName);
+
             FlavorManager.Instance.SetCurrentFlavor(newFlavor);
             EditorUtility.SetDirty(FlavorManager.Instance);
             Selection.activeObject = newFlavor;
@@ -55,5 +54,23 @@ public class FlavorCreationWindow : EditorWindow
 
         var defineSymbol = _name.Replace(" ", "_").ToUpper();
         GUILayout.Label($"<i>Your new define symbol will be 'FLAVOR_{defineSymbol}'</i>", labelStyle);
+    }
+
+    private static Flavor CreateNewFlavorAsset(string newFlavorName)
+    {
+        string dirPath = $"Assets/Flavors";
+        
+        if (!AssetDatabase.IsValidFolder(dirPath))
+        {
+            Directory.CreateDirectory(dirPath);
+            AssetDatabase.Refresh();
+        }
+
+        Flavor newFlavor = ScriptableObject.CreateInstance<Flavor>();
+
+        AssetDatabase.CreateAsset(newFlavor, $"{dirPath}/{newFlavorName}.asset");
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        return newFlavor;
     }
 }
